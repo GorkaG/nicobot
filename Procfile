@@ -1,1 +1,1 @@
-worker: node nicobot
+worker: node nicobot.js
