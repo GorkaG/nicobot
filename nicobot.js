@@ -3,6 +3,7 @@ const helpers = require('./helpers.js');
 const bot = new Discord.Client();
  bot.on('ready', () => {
      console.log('Nico Nico Nii');
+     bot.user.setUsername("Nico Yazawa");
  });
 
 let prefix = process.env.PREFIX;
