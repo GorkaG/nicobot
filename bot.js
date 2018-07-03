@@ -21,7 +21,7 @@ bot.on('message', (message) => {
             message.channel.sendMessage('Nico Nico Nii');
         }
    if (message.content == 'n!invite') {
-            message.channel.sendMessage('https://goo.gl/7gtBTK');
+            message.channel.sendMessage('Link del bot Test: https://goo.gl/7gtBTK Link del bot Oficial: https://goo.gl/Xoxuzm');
         }
 });
 bot.login(process.env.BOT_TOKEN);
