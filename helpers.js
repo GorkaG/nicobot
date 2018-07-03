@@ -45,7 +45,7 @@ exports.handleMessageDeletions = (message) => {
                     message.delete()
 
                     //Stores time of removal
-                    message.author.createDM().then(onFulfilled => onFulfilled.sendMessage("fukyu :D https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
+                    message.author.createDM().then(onFulfilled => onFulfilled.sendMessage("Your message upload was removed for using a non-whitelisted file type. Only gifs and images are allowed."));
               }
         }
 }
@@ -61,7 +61,7 @@ exports.handleLinkDeletions = (message) =>{
                     if(badLinks.length != 0){
                       message.delete()
                       //Stores time of removal
-                      message.author.createDM().then(onFulfilled => onFulfilled.sendMessage("fukyu :D https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
+                      message.author.createDM().then(onFulfilled => onFulfilled.sendMessage("Your message upload was removed for using a non-whitelisted file type. Only gifs and images are allowed."));
                     }
                   }
 
