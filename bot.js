@@ -21,4 +21,4 @@ bot.on('message', (message) => {
             message.channel.sendMessage('Nico Nico Nii');
         }
 });
-bot.login(process.env.TOKEN);
+bot.login(process.env.BOT_TOKEN);
