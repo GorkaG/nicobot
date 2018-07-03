@@ -1,31 +1,13 @@
 {
-  "name": "nicobot",
-  "version": "1.0.0",
-  "description": "",
+  "name": "Test",
+  "description": "Test",
+  "version": "0.0.0",
   "main": "nicobot.js",
-  "engines": {
-    "node": "8.x",
-    "npm": "*"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node nicobot.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/synicalsyntax/discord.js-heroku.git"
-  },
-  "keywords": [
-    "heroku",
-    "discord.js"
-  ],
-  "author": "synicalsyntax",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/synicalsyntax/discord.js-heroku/issues"
-  },
-  "homepage": "https://github.com/synicalsyntax/discord.js-heroku#readme",
   "dependencies": {
-    "discord.js": "^11.3.0"
+    "discord.js": "11.1.0",
+    "request": "2.81.0"
   }
 }
