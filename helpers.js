@@ -73,32 +73,28 @@ exports.handleChannelLock = async (message) =>{
   if(message.content.startsWith('n!imageLock')){
     let enable = message.content.split(" ")[1];
     if(enable === undefined || !(enable === 'enable' || enable === 'disable')) {
-      message.sendMessage("You must provide if the image lock is enabled or disabled");
+      message.channel.sendMessage("You must provide if the image lock is enabled or disabled");
     }
     let enabled = enable === 'enable' ? true : false;
     let lockImage = {
       channelId: message.channel.id,
-      locked: enable
+      locked: enabled
     };
-    await db.LockImageSchema.findOne({channelId : message.channel.id})
-    .then(lockImage => {
-      if(lockImage === undefined){
-        await db.LockImageSchema.create(lockImage);
-      }
-      else{
-        await db.LockImageSchema.findOneAndUpdate({ _id: lockImage._id }, lockImage, { new: true })
-      }
-    });
+    let lockImageReturned = await db.LockImageSchema.findOne({channelId : message.channel.id})
+    if(lockImageReturned === undefined || lockImageReturned === null){
+      await db.LockImageSchema.create(lockImage);
+    }
+    else{
+      await db.LockImageSchema.findOneAndUpdate({ _id: lockImageReturned._id }, lockImage, { new: true })
+    }
   }
 }
-exports.isChannelLocked = (message) =>{
-  db.findOne({channelId: message.channel.id})
-  .then(lockImage => {
-    if(lockImage === undefined){
-      return false;
-    }
-    return lockImage.locked;
-  });
+exports.isChannelLocked = async (message) =>{
+  let lockImage = await db.LockImageSchema.findOne({channelId: message.channel.id})
+  if(lockImage === undefined || lockImage === null){
+    return false;
+  }
+  return lockImage.locked;
 }
 
 function neverGonnaGiveYouUp(channel){

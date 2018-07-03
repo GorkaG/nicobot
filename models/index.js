@@ -5,4 +5,4 @@ mongoose.connect(process.env.MONGO_URL_CONNECTION);
 mongoose.Promise = Promise;
 
 
-module.exports.Todo = require("./todo");
+module.exports.LockImageSchema = require("./imageLockSchema");
