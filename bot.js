@@ -20,5 +20,8 @@ bot.on('message', (message) => {
   if (message.content == 'hello') {
             message.channel.sendMessage('Nico Nico Nii');
         }
+   if (message.content == 'n!invite') {
+            message.channel.sendMessage('https://goo.gl/7gtBTK');
+        }
 });
 bot.login(process.env.BOT_TOKEN);
