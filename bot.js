@@ -1,36 +1,51 @@
+const fs = require('fs');
 const Discord = require('discord.js');
+const { prefix } = require('./config.json');
 const helpers = require('./helpers.js');
+
 const bot = new Discord.Client();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+bot.commands = new Discord.Collection();
+
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    bot.commands.set(command.name, command);
+}
+
 bot.on('ready', () => {
     console.log('Nico Nico Nii');
     bot.user.setUsername("Nico Yazawa");
 });
 
-let prefix = process.env.PREFIX;
 bot.on('message', (message) => {
     if (message.author.bot) return;
-    let channelLock = helpers.handleChannelLock(message);
-    channelLock.then(() => {
-        return helpers.isChannelLocked(message);
-    })
-        .then(locked => {
-            if (locked) {
-                helpers.handleMessageDeletions(message);
-                helpers.handleLinkDeletions(message);
-            }
-        });
+    
+    const args = message.content.slice(prefix.length).split(/ +/).filter(v => v != "");
+    const command = args.shift().toLowerCase();
+    const isCommand = bot.commands.has(command);
 
-    if (message.content == 'hi') {
-        message.channel.sendMessage('Nico Nico Nii');
+    if(isCommand){
+        if(command == "help"){
+            bot.commands.get(command).execute(message,bot.commands);
+            return;
+        }
+        try {
+            bot.commands.get(command).execute(message, args);
+        }
+        catch (error) {
+            console.error(error);
+            message.reply('there was an error trying to execute that command!');
+        }
     }
-    if (message.content == 'hola') {
-        message.channel.sendMessage('Nico Nico Nii');
-    }
-    if (message.content == 'hello') {
-        message.channel.sendMessage('Nico Nico Nii');
-    }
-    if (message.content == 'n!invite') {
-        message.channel.sendMessage('Link del bot Test: <https://goo.gl/7gtBTK> Link del bot Oficial: <https://goo.gl/Xoxuzm>');
+    // filter function
+    else{
+        helpers.isChannelLocked(message).then(locked => {
+                if (locked) {
+                    helpers.handleMessageDeletions(message);
+                    helpers.handleLinkDeletions(message);
+                }
+            });
     }
 });
 bot.login(process.env.BOT_TOKEN);

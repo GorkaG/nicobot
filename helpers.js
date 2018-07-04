@@ -1,4 +1,4 @@
-var db = require('./models');
+
 var notValid = (toTest) =>{
   if (toTest.endsWith(".png") == false &&
       toTest.endsWith(".gif") == false &&
@@ -69,26 +69,6 @@ exports.handleLinkDeletions = (message) =>{
                   //Deletes the message that was sent if has a non-whitelisted attachment
 }
 
-exports.handleChannelLock = async (message) =>{
-  if(message.content.startsWith('n!imageLock')){
-    let enable = message.content.split(" ")[1];
-    if(enable === undefined || !(enable === 'enable' || enable === 'disable')) {
-      message.channel.sendMessage("You must provide if the image lock is enabled or disabled");
-    }
-    let enabled = enable === 'enable' ? true : false;
-    let lockImage = {
-      channelId: message.channel.id,
-      locked: enabled
-    };
-    let lockImageReturned = await db.LockImageSchema.findOne({channelId : message.channel.id})
-    if(lockImageReturned === undefined || lockImageReturned === null){
-      await db.LockImageSchema.create(lockImage);
-    }
-    else{
-      await db.LockImageSchema.findOneAndUpdate({ _id: lockImageReturned._id }, lockImage, { new: true })
-    }
-  }
-}
 exports.isChannelLocked = async (message) =>{
   let lockImage = await db.LockImageSchema.findOne({channelId: message.channel.id})
   if(lockImage === undefined || lockImage === null){
