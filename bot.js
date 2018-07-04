@@ -20,14 +20,13 @@ bot.on('ready', () => {
 
 bot.on('message', (message) => {
     if (message.author.bot) return;
-    
-    const args = message.content.slice(prefix.length).split(/ +/).filter(v => v != "");
-    const command = args.shift().toLowerCase();
-    const isCommand = bot.commands.has(command);
+    const isCommand = message.content.startsWith(prefix);
 
-    if(isCommand){
-        if(command == "help"){
-            bot.commands.get(command).execute(message,bot.commands);
+    if (isCommand) {
+        const args = message.content.slice(prefix.length).split(/ +/).filter(v => v != "");
+        const command = args.shift().toLowerCase();
+        if (command == "help") {
+            bot.commands.get(command).execute(message, bot.commands);
             return;
         }
         try {
@@ -39,13 +38,13 @@ bot.on('message', (message) => {
         }
     }
     // filter function
-    else{
+    else {
         helpers.isChannelLocked(message).then(locked => {
-                if (locked) {
-                    helpers.handleMessageDeletions(message);
-                    helpers.handleLinkDeletions(message);
-                }
-            });
+            if (locked) {
+                helpers.handleMessageDeletions(message);
+                helpers.handleLinkDeletions(message);
+            }
+        });
     }
 });
 bot.login(process.env.BOT_TOKEN);
