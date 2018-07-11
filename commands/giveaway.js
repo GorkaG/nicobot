@@ -11,10 +11,18 @@ function makeFilters(author) {
             return message.author.id == currentAuthor.id && message.mentions.channels.first();
         },
         authorAndTimeFilter(message){
-            return message.author.id === currentAuthor.id && !isNaN(message.content)
+            return message.author.id === currentAuthor.id && !isNaN(message.content);
+        },
+        authorAndNumberFilter(message){
+            return message.author.id === currentAuthor.id && !isNaN(message.content);
+        },
+        authorAndRoleFilter(message){
+            return message.author.id === currentAuthor.id && message.mentions.roles.length !== 0;
         },
         reactionsFilter(reaction,user){
-            return reaction.emoji.name === '👍' && !user.bot;;
+            //console.log(user);
+            const returnedValue = reaction.emoji.name === '👍' && !user.bot;
+            return returnedValue;
         }
     }
 }
@@ -24,6 +32,34 @@ function makeSteps(filter,channel) {
     let targetChannel;
     let time;
     let prize;
+    let numberOfPrizes;
+    let lastRoleExtraValue;
+    let guild;
+
+    function calculateWinner(users) {
+        //console.log(users);
+        let correctedUsers;
+        let randomIndex;
+        correctedUsers = users
+            .map(userCollection => userCollection[1])
+            .filter(user => !user.bot)
+            .map(user => guild.members.find(member =>member.user.id === user.id))
+            .reduce((acc,next) => {
+                //console.log(next);
+                if(next.roles.length !== 0){
+                    const maxPositionRol = Math.max(...next.roles.map(rol => rol.position));
+                    console.log("max position: ", maxPositionRol, " lastRoleExtraValue: ", lastRoleExtraValue.calculatedPosition );
+                    if(maxPositionRol >= lastRoleExtraValue.calculatedPosition){
+                        return [...acc,next,next];
+                    }
+                }
+                return [...acc,next];
+            },[])
+        console.log(correctedUsers);
+        randomIndex = getRandomInt(0,correctedUsers.length);
+        return correctedUsers[randomIndex];
+    }
+
     return {
         askChannel(){
             return currentChannel.awaitMessages(currentFilter.authorAndChannelFilter, { max: 1, time: MAX_TIME, errors: ['time'] })
@@ -35,6 +71,14 @@ function makeSteps(filter,channel) {
         askPrize(){
             currentChannel.send("Set the prize");
             return currentChannel.awaitMessages(currentFilter.authorFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
+        },
+        askNumberOfPrizes(){
+            currentChannel.send("Set the number of prizes");
+            return currentChannel.awaitMessages(currentFilter.authorAndNumberFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
+        },
+        askRoleExtraValue(){
+            currentChannel.send("Set the last role with extra value");
+            return currentChannel.awaitMessages(currentFilter.authorAndRoleFilter, {max: 1, time: MAX_TIME, errors: ['time']});
         },
         startGiveaway(){
             return targetChannel.send(`
@@ -49,17 +93,27 @@ function makeSteps(filter,channel) {
         },
        
         giveResults(messageReactions){
-            if(messageReactions === undefined){
-                throw Error;
+            if(messageReactions === undefined || messageReactions.first() === undefined){
+                throw "noVotes";
             }
             const messageReaction = messageReactions.first();
-            targetChannel.send(messageReaction.users.reduce((acc,next)=> acc+=`, ${next}`,''));
+            const users = messageReaction.users;
+            let popedUsers = [...users];
+            let winners = [];
+            Array(numberOfPrizes).fill(1).forEach(()=>{
+                if(popedUsers.length !== 0){
+                    let winner = calculateWinner(popedUsers);
+                    winners.push(winner);
+                    popedUsers = popedUsers.filter(user => user.id === winner.id);
+                }
+            });
+            targetChannel.send("And the winners are: " + winners.reduce((acc,next)=> acc+=`, ${next}`,''));
         },
         handleErrors(error){
             if(error instanceof Collection){
                 channel.send("Time out!");
             }
-            else if(error instanceof Error){
+            else if(error === "noVotes"){
                 channel.send("No one voted");
             }
             else{
@@ -76,12 +130,22 @@ function makeSteps(filter,channel) {
         savePrize(collectedMessages){
             prize = collectedMessages.first().content;
         },
+        saveNumberOfPrizes(collectedMessages){
+            numberOfPrizes =  collectedMessages.first().content;
+        },
+        saveRoleExtraValue(collectedMessages){
+            lastRoleExtraValue = collectedMessages.first().mentions.roles.first();
+        },
+        saveGuild(savedGuild){
+            guild = savedGuild;
+        },
         getChannel(){
             return targetChannel;
         },
         getTime(){
             return time;
-        }
+        },
+        
     }
 }
 
@@ -91,6 +155,7 @@ module.exports = {
     execute(message, args) {
         const filters = makeFilters(message.author);
         const steps = makeSteps(filters,message.channel);
+        steps.saveGuild(message.guild);
 
         let channel;
         let time;
@@ -102,6 +167,10 @@ module.exports = {
         .then(steps.saveTime)
         .then(steps.askPrize)
         .then(steps.savePrize)
+        .then(steps.askNumberOfPrizes)
+        .then(steps.saveNumberOfPrizes)
+        .then(steps.askRoleExtraValue)
+        .then(steps.saveRoleExtraValue)
         .then(()=>message.channel.send(`Almost there channel: ${steps.getChannel()} and time ${steps.getTime()}`))
         .then(steps.startGiveaway)
         .then(steps.giveResults)
@@ -110,3 +179,7 @@ module.exports = {
     },
 };
 
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
