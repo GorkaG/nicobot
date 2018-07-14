@@ -21,7 +21,7 @@ function makeFilters(author) {
         },
         reactionsFilter(reaction,user){
             //console.log(user);
-            const returnedValue = reaction.emoji.name === '👍' && !user.bot;
+            const returnedValue = reaction.emoji.name === '<:GWnanamiTPLove:410092379098447884>' && !user.bot;
             return returnedValue;
         }
     }
@@ -87,7 +87,7 @@ function makeSteps(filter,channel) {
         Prize: ${prize}
             `)
             .then(message => {
-                message.react("👍");
+                message.react("<:GWnanamiTPLove:410092379098447884>");
                 return message.awaitReactions(currentFilter.reactionsFilter,{time: time*1000});
             })
         },
