@@ -1,5 +1,5 @@
 var{Collection} = require('discord.js');
-const MAX_TIME = 10000;
+const MAX_TIME = 60000;
 
 function makeFilters(author) {
     let currentAuthor = author;
@@ -17,7 +17,7 @@ function makeFilters(author) {
             return message.author.id === currentAuthor.id && !isNaN(message.content);
         },
         authorAndRoleFilter(message){
-            return message.author.id === currentAuthor.id && message.mentions.roles.length !== 0;
+            return message.author.id === currentAuthor.id && message.mentions.roles.array().length !== 0;
         },
         reactionsFilter(reaction,user){
             //console.log(user);
@@ -100,11 +100,16 @@ function makeSteps(filter,channel) {
             const users = messageReaction.users;
             let popedUsers = [...users];
             let winners = [];
-            Array(numberOfPrizes).fill(1).forEach(()=>{
+            let prizes =  Array(parseInt(numberOfPrizes)).fill(1);
+            console.log("numbero fo prizes", numberOfPrizes);
+            console.log("prices ", prizes);
+            console.log("time ",time);
+            prizes.forEach(()=>{
                 if(popedUsers.length !== 0){
                     let winner = calculateWinner(popedUsers);
                     winners.push(winner);
-                    popedUsers = popedUsers.filter(user => user.id === winner.id);
+                    popedUsers = popedUsers.filter(user => {console.log("filterUser",user[1].id !== winner.id);return user[1].id !== winner.id});
+                    console.log("Rest of users: ", popedUsers.map(user => user));
                 }
             });
             targetChannel.send("And the winners are: " + winners.reduce((acc,next)=> acc+=`, ${next}`,''));
@@ -131,6 +136,7 @@ function makeSteps(filter,channel) {
             prize = collectedMessages.first().content;
         },
         saveNumberOfPrizes(collectedMessages){
+            console.log("number of prices", collectedMessages.first().content);
             numberOfPrizes =  collectedMessages.first().content;
         },
         saveRoleExtraValue(collectedMessages){
