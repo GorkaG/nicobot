@@ -82,6 +82,12 @@ function makeSteps(filter,channel) {
         },
         startGiveaway(){
             return targetChannel.send(`
+            {embed: {
+    color: 3447003,
+    author: {
+      name: client.user.username,
+      icon_url: client.user.avatarURL
+    },
             Let the giveaway begin
         Duration ${time}
         Prize: ${prize}
