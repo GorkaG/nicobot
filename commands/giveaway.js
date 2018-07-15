@@ -82,16 +82,20 @@ function makeSteps(filter,channel) {
         },
         startGiveaway(){
             return targetChannel.send(`
-            {embed: {
-    color: 3447003,
-    author: {
-      name: client.user.username,
-      icon_url: client.user.avatarURL
-    },
-            Let the giveaway begin
+        Let the giveaway begin
         Duration ${time}
         Prize: ${prize}
             `)
+            
+            {embed: {
+      color: 3447003,
+      title: "*G I V E A W A Y*",
+      fields: [
+        { name: "Duration", value="${time}"},
+        { name: "Prize", value: "${prize}"},
+      ]
+    }
+  })
             .then(message => {
                 message.react("👍");
                 return message.awaitReactions(currentFilter.reactionsFilter,{time: time*1000});
