@@ -83,9 +83,9 @@ function makeSteps(filter,channel) {
         startGiveaway(){
             return targetChannel.send({embed:{
                 title: ` ${prize} `,
-                description: `React with 👍 to enter! \n Time remaining: ${time} `,
+                description: `React with 👍 to enter! \nTime remaining: ${time} `,
                 color: 0x17A589,
-                timestamp: new Date(),
+                timestamp: new Date(Date.now() + time * 1000),
                 footer: {
                 text: `${numberOfPrizes} Winners`
             }}})
