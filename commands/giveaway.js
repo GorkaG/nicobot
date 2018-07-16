@@ -81,7 +81,7 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndRoleFilter, {max: 1, time: MAX_TIME, errors: ['time']});
         },
         startGiveaway(){
-            return targetChannel.send("some content", {embedObject})
+            return targetChannel.send("some content",{embedObject})
             .then(message => {
                 message.react("👍");
                 return message.awaitReactions(currentFilter.reactionsFilter,{time: time*1000});
