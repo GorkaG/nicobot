@@ -65,11 +65,11 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndChannelFilter, { max: 1, time: MAX_TIME, errors: ['time'] })
         },
         askDuration(){
-            currentChannel.send(`Sweet! The giveaway will be in ${steps.getChannel()} ! Next, how long should the giveaway last? `);
+            currentChannel.send("Sweet! Next, how long should the giveaway last? ");
             return currentChannel.awaitMessages(currentFilter.authorAndTimeFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askPrize(){
-            currentChannel.send(`Ok! ${numberOfPrizes} winners it is! Finally, what do you want to giveaway? `);
+            currentChannel.send("Ok! Finally, what do you want to giveaway? ");
             return currentChannel.awaitMessages(currentFilter.authorFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askNumberOfPrizes(){
@@ -180,7 +180,7 @@ module.exports = {
         .then(steps.savePrize)
         .then(steps.askRoleExtraValue)
         .then(steps.saveRoleExtraValue)
-        .then(()=>message.channel.send(`Done! the giveaway is starting in ${steps.getChannel()} and time ${steps.getTime()}`))
+        .then(()=>message.channel.send(`Done! the giveaway is starting in ${steps.getChannel()} and end in ${steps.getTime()}`))
         .then(steps.startGiveaway)
         .then(steps.giveResults)
         .catch(steps.handleErrors)
