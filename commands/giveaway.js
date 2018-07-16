@@ -21,7 +21,7 @@ function makeFilters(author) {
         },
         reactionsFilter(reaction,user){
             //console.log(user);
-            const returnedValue = reaction.emoji.name === '<:NicoNicoNii:360455426745303041>' && !user.bot;
+            const returnedValue = reaction.emoji.name === '360455426745303041' && !user.bot;
             return returnedValue;
         }
     }
