@@ -65,7 +65,7 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndChannelFilter, { max: 1, time: MAX_TIME, errors: ['time'] })
         },
         askDuration(){
-            currentChannel.send("Set the duration in seconds");
+            currentChannel.send(`Sweet! The giveaway will be in targetChannel ! Next, how long should the giveaway last?`);
             return currentChannel.awaitMessages(currentFilter.authorAndTimeFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askPrize(){
@@ -115,7 +115,7 @@ function makeSteps(filter,channel) {
                     console.log("Rest of users: ", popedUsers.map(user => user));
                 }
             });
-            targetChannel.send("And the winners are: " + winners.reduce((acc,next)=> acc+=`, ${next}`,''));
+            targetChannel.send("Winners " + winners.reduce((acc,next)=> acc+=`, ${next}`,''));
         },
         handleErrors(error){
             if(error instanceof Collection){
@@ -169,7 +169,7 @@ module.exports = {
         let channel;
         let time;
 
-        message.channel.send("Alright! Let's set up your giveaway! First, what channel do you want the giveaway in? \n`Please type the name of a channel in this server.`")
+        message.channel.send("Alright! Let's set up your giveaway! First, what channel do you want the giveaway in? \n\n`Please type the name of a channel in this server.`")
         .then(steps.askChannel)
         .then(steps.saveChannel)
         .then(steps.askDuration)
