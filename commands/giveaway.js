@@ -21,7 +21,7 @@ function makeFilters(author) {
         },
         reactionsFilter(reaction,user){
             //console.log(user);
-            const returnedValue = reaction.emoji.name === '👍' && !user.bot;
+            const returnedValue = reaction.emoji.name === '<:NicoNicoNii:360455426745303041>' && !user.bot;
             return returnedValue;
         }
     }
@@ -83,7 +83,7 @@ function makeSteps(filter,channel) {
         startGiveaway(){
             return targetChannel.send({embed:{
                 title: ` ${prize} `,
-                description: `React with 👍 <:nico:360455426745303041> to enter! `,
+                description: `React with 👍 <:NicoNicoNii:360455426745303041> to enter! `,
                 color: 0x17A589,
                 timestamp: new Date(Date.now() + time * 1000),
                 footer: {
