@@ -65,15 +65,15 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndChannelFilter, { max: 1, time: MAX_TIME, errors: ['time'] })
         },
         askDuration(){
-            currentChannel.send(`Sweet! The giveaway will be in ${steps.getChannel()} ! Next, how long should the giveaway last? \n\n`Please enter the duration of the giveaway in seconds. \nAlternatively, enter a duration in minutes and include an M at the end.``);
+            currentChannel.send(`Sweet! The giveaway will be in ${steps.getChannel()} ! Next, how long should the giveaway last? `);
             return currentChannel.awaitMessages(currentFilter.authorAndTimeFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askPrize(){
-            currentChannel.send(`Ok! ${numberOfPrizes} winners it is! Finally, what do you want to give away? \n\n´Please enter the giveaway prize.``);
+            currentChannel.send(`Ok! ${numberOfPrizes} winners it is! Finally, what do you want to giveaway? `);
             return currentChannel.awaitMessages(currentFilter.authorFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askNumberOfPrizes(){
-            currentChannel.send(`Neat! Now, how many winners should there be? \n`Please enter a number of winners between 1 and 15.``);
+            currentChannel.send("Neat! Now, how many winners should there be?");
             return currentChannel.awaitMessages(currentFilter.authorAndNumberFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askRoleExtraValue(){
@@ -169,7 +169,7 @@ module.exports = {
         let channel;
         let time;
 
-        message.channel.send("Alright! Let's set up your giveaway! First, what channel do you want the giveaway in? \n\n`Please type the name of a channel in this server.`")
+        message.channel.send("Alright! Let's set up your giveaway! First, what channel do you want the giveaway in? ")
         .then(steps.askChannel)
         .then(steps.saveChannel)
         .then(steps.askDuration)
