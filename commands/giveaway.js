@@ -65,19 +65,19 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndChannelFilter, { max: 1, time: MAX_TIME, errors: ['time'] })
         },
         askDuration(){
-            currentChannel.send("Sweet! The giveaway will be in ${steps.getChannel()} ! Next, how long should the giveaway last? \n\n`Please enter the duration of the giveaway in seconds. \nAlternatively, enter a duration in minutes and include an M at the end.`");
+            currentChannel.send('Sweet! The giveaway will be in ${steps.getChannel()} ! Next, how long should the giveaway last? \n\n`Please enter the duration of the giveaway in seconds. \nAlternatively, enter a duration in minutes and include an M at the end.`');
             return currentChannel.awaitMessages(currentFilter.authorAndTimeFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askPrize(){
-            currentChannel.send("Set the prize");
+            currentChannel.send('Ok! ${numberOfPrizes} winners it is! Finally, what do you want to give away? \n\n´Please enter the giveaway prize.`');
             return currentChannel.awaitMessages(currentFilter.authorFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askNumberOfPrizes(){
-            currentChannel.send("Set the number of winners");
+            currentChannel.send("Neat! Now, how many winners should there be?");
             return currentChannel.awaitMessages(currentFilter.authorAndNumberFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askRoleExtraValue(){
-            currentChannel.send("Set the last role with extra value");
+            currentChannel.send("And the last role with the special love?");
             return currentChannel.awaitMessages(currentFilter.authorAndRoleFilter, {max: 1, time: MAX_TIME, errors: ['time']});
         },
         startGiveaway(){
@@ -174,10 +174,10 @@ module.exports = {
         .then(steps.saveChannel)
         .then(steps.askDuration)
         .then(steps.saveTime)
-        .then(steps.askPrize)
-        .then(steps.savePrize)
         .then(steps.askNumberOfPrizes)
         .then(steps.saveNumberOfPrizes)
+        .then(steps.askPrize)
+        .then(steps.savePrize)
         .then(steps.askRoleExtraValue)
         .then(steps.saveRoleExtraValue)
         .then(()=>message.channel.send(`Done! the giveaway is starting in ${steps.getChannel()} and time ${steps.getTime()}`))
