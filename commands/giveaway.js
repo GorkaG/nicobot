@@ -81,7 +81,7 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndRoleFilter, {max: 1, time: MAX_TIME, errors: ['time']});
         },
         startGiveaway(){
-            return message.targetChannel.send({embed:{
+            return targetChannel.send({embed:{
                         title: "test",
                         description: "testing embed",
                         color: 0x17A589
