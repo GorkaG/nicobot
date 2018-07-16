@@ -73,7 +73,7 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askNumberOfPrizes(){
-            currentChannel.send("Set the number of prizes");
+            currentChannel.send("Set the number of winners");
             return currentChannel.awaitMessages(currentFilter.authorAndNumberFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askRoleExtraValue(){
@@ -83,7 +83,7 @@ function makeSteps(filter,channel) {
         startGiveaway(){
             return targetChannel.send({embed:{
                 title: ` ${prize} `,
-                description: `React with 👍 <:NicoNicoNii:360455426745303041> to enter! `,
+                description: `React with <:NicoNicoNii:360455426745303041> to enter! `,
                 color: 0x17A589,
                 timestamp: new Date(Date.now() + time * 1000),
                 footer: {
@@ -169,7 +169,7 @@ module.exports = {
         let channel;
         let time;
 
-        message.channel.send("Let's set upp the give away, give the channel where you want it to be")
+        message.channel.send("Alright! Let's set up your giveaway! First, what channel do you want the giveaway in? \n`Please type the name of a channel in this server.`")
         .then(steps.askChannel)
         .then(steps.saveChannel)
         .then(steps.askDuration)
@@ -180,7 +180,7 @@ module.exports = {
         .then(steps.saveNumberOfPrizes)
         .then(steps.askRoleExtraValue)
         .then(steps.saveRoleExtraValue)
-        .then(()=>message.channel.send(`Almost there channel: ${steps.getChannel()} and time ${steps.getTime()}`))
+        .then(()=>message.channel.send(`Done! the giveaway is starting in ${steps.getChannel()} and time ${steps.getTime()}`))
         .then(steps.startGiveaway)
         .then(steps.giveResults)
         .catch(steps.handleErrors)
