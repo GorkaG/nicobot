@@ -87,7 +87,7 @@ function makeSteps(filter,channel) {
                 color: 0x17A589,
                 timestamp: new Date(Date.now() + time * 1000),
                 footer: {
-                text: `${numberOfPrizes} Winners`
+                text: `${numberOfPrizes} Winners|Ends at|`
             }}})
             .then(message => {
                 message.react("👍");
