@@ -82,8 +82,9 @@ function makeSteps(filter,channel) {
         },
         startGiveaway(){
             return targetChannel.send({embed:{
-                        color: 3447003,
-                        description: "testing embed"
+                        title: "test",
+                        description: "testing embed",
+                        color: 0x17A589
             }})
             .then(message => {
                 message.react("👍");
