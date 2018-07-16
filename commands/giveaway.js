@@ -83,14 +83,14 @@ function makeSteps(filter,channel) {
         startGiveaway(){
             return targetChannel.send({embed:{
                 title: ` ${prize} `,
-                description: `React with 👍 <:nico:468266293678702593> to enter! `,
+                description: `React with 👍 <:nico:360455426745303041> to enter! `,
                 color: 0x17A589,
                 timestamp: new Date(Date.now() + time * 1000),
                 footer: {
                 text: `${numberOfPrizes} Winners | Ends at`
             }}})
             .then(message => {
-                message.react("468266293678702593");
+                message.react("360455426745303041");
                 return message.awaitReactions(currentFilter.reactionsFilter,{time: time*1000});
             })
         },
