@@ -81,10 +81,28 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndRoleFilter, {max: 1, time: MAX_TIME, errors: ['time']});
         },
         startGiveaway(){
-            return targetChannel.send({embed:{
-                title: "test",
-                description: "testing",
+            return targetChannel.send('**G I V E A W A Y**'{embed:{
+                title: "${prize}",
+                description: "React with 👍 to enter!
+                Time remaining: ${time}"
                 color: 0x17A589
+                fields: [{
+        name: "Fields",
+        value: "They can have different fields with small headlines."
+      },
+      {
+        name: "Masked links",
+        value: "You can put [masked links](http://google.com) inside of rich embeds."
+      },
+      {
+        name: "Markdown",
+        value: "You can put all the *usual* **__Markdown__** inside of them."
+      }
+    ],
+    timestamp: new Date(),
+    footer: {
+          text: "${numberOfPrizes} Winners"
+    }
             }})
             .then(message => {
                 message.react("👍");
