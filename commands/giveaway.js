@@ -81,11 +81,12 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndRoleFilter, {max: 1, time: MAX_TIME, errors: ['time']});
         },
         startGiveaway(){
-            return targetChannel.send({embed:{
-                        title: "test",
-                        description: "testing embed",
-                        color: 0x17A589
-            }})
+            return targetChannel.send(`
+            *G I V E A W A Y*
+        *Duration:* ${time}
+        *Prize:* ${prize}
+        *Number of winners:* ${numberOfPrizes}
+            `)
             .then(message => {
                 message.react("👍");
                 return message.awaitReactions(currentFilter.reactionsFilter,{time: time*1000});
