@@ -65,7 +65,7 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndChannelFilter, { max: 1, time: MAX_TIME, errors: ['time'] })
         },
         askDuration(){
-            currentChannel.send(`Sweet! The giveaway will be in targetChannel ! Next, how long should the giveaway last?`);
+            currentChannel.send("Sweet! The giveaway will be in ${steps.getChannel()} ! Next, how long should the giveaway last? \n\n`Please enter the duration of the giveaway in seconds. \nAlternatively, enter a duration in minutes and include an M at the end.`");
             return currentChannel.awaitMessages(currentFilter.authorAndTimeFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askPrize(){
