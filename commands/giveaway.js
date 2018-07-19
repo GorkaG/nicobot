@@ -176,7 +176,7 @@ module.exports = {
         let channel;
         let time;
 
-        message.channel.send("Let's set upp the give away, give the channel where you want it to be")
+        message.channel.send("Alright! Let's set up your giveaway! First, what channel do you want the giveaway in?")
         .then(steps.askChannel)
         .then(steps.saveChannel)
         .then(steps.askDuration)
@@ -187,7 +187,7 @@ module.exports = {
         .then(steps.savePrize)
         .then(steps.askRoleExtraValue)
         .then(steps.saveRoleExtraValue)
-        .then(()=>message.channel.send(`Almost there channel: ${steps.getChannel()} and time ${steps.getTime()}`))
+        .then(()=>message.channel.send(`Done! the giveaway is starting in ${steps.getChannel()} and end in ${steps.getTime()}`))
         .then(steps.startGiveaway)
         .then(steps.giveResults)
         .catch(steps.handleErrors)
