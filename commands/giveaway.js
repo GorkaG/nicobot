@@ -1,5 +1,6 @@
 var{Collection} = require('discord.js');
 const MAX_TIME = 60000;
+const NO_VOTES_EXCEPTION = "noVotes";
 
 function makeFilters(author) {
     let currentAuthor = author;
@@ -41,9 +42,6 @@ function makeSteps(filter,channel) {
         let correctedUsers;
         let randomIndex;
         correctedUsers = users
-            .map(userCollection => userCollection[1])
-            .filter(user => !user.bot)
-            .map(user => guild.members.find(member =>member.user.id === user.id))
             .reduce((acc,next) => {
                 //console.log(next);
                 if(next.roles.length !== 0){
@@ -94,31 +92,40 @@ function makeSteps(filter,channel) {
        
         giveResults(messageReactions){
             if(messageReactions === undefined || messageReactions.first() === undefined){
-                throw "noVotes";
+                throw NO_VOTES_EXCEPTION;
             }
             const messageReaction = messageReactions.first();
             const users = messageReaction.users;
             let popedUsers = [...users];
-            let winners = [];
-            let prizes =  Array(parseInt(numberOfPrizes)).fill(1);
-            console.log("numbero fo prizes", numberOfPrizes);
-            console.log("prices ", prizes);
-            console.log("time ",time);
-            prizes.forEach(()=>{
-                if(popedUsers.length !== 0){
-                    let winner = calculateWinner(popedUsers);
-                    winners.push(winner);
-                    popedUsers = popedUsers.filter(user => {console.log("filterUser",user[1].id !== winner.id);return user[1].id !== winner.id});
-                    console.log("Rest of users: ", popedUsers.map(user => user));
-                }
+            guild.fetchMembers().then((fetchedGuild) => {
+                const allGuildMembers = fetchedGuild.members;
+                let guildMembers = popedUsers
+                    .map( user  => user[1])
+                    .filter(user => !user.bot)
+                    .map(user => allGuildMembers
+                        .get(user.id));
+                let winners = [];
+                let prizes =  Array(parseInt(numberOfPrizes)).fill(1);
+                console.log("numbero fo prizes", numberOfPrizes);
+                console.log("prices ", prizes);
+                console.log("time ",time);
+                prizes.forEach(()=>{
+                    if(guildMembers.length !== 0){
+                        let winner = calculateWinner(guildMembers);
+                        winners.push(winner);
+                        guildMembers = guildMembers.filter(user =>  user.id !== winner.id);
+                        console.log("Rest of users: ", popedUsers.map(user => user));
+                    }
+                });
+                targetChannel.send("And the winners are: " + winners.join());
             });
-            targetChannel.send("And the winners are: " + winners.reduce((acc,next)=> acc+=`, ${next}`,''));
+            
         },
         handleErrors(error){
             if(error instanceof Collection){
                 channel.send("Time out!");
             }
-            else if(error === "noVotes"){
+            else if(error === NO_VOTES_EXCEPTION){
                 channel.send("No one voted");
             }
             else{
