@@ -3,7 +3,7 @@
 const NO_ADMIN_EXCEPTION = "noAdminException";
 const NO_CHANNEL_EXCEPTION = "noChannelException";
 const NO_MESSAGE_EXCEPTION = "noMessageException";
-const WAIT_TIME = 10000;
+const WAIT_TIME = 600*1000;
 const {isAdmin} = require('../helpers/admin');
 module.exports = {
     name: 'talk',
