@@ -54,7 +54,6 @@ exports.handleMessageDeletions = (message) => {
 exports.handleLinkDeletions = (message) =>{
                   //Assigns the file's filename to the filename variable
                   let content = message.content;
-                  console.log("test");
                   //Puts the filename to lowercase
                   content = content.toLowerCase();
                   //Checks if the file type is odsdsdf a whitelisted type

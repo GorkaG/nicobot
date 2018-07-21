@@ -1,12 +1,13 @@
 var {prefix} = require('../config.json');
 
 module.exports = {
-    name: 'help',
-    description: 'Display all the commands',
-    isAdminCommand: false,
+    name: 'adminhelp',
+    description: 'Display all the admin commands',
+    isAdminCommand: true,
     execute(message, commands) {
+
         var acc= '```';
-        let newMessage = commands.filter(command => !command.isAdminCommand)
+        let newMessage = commands.filter(command => command.isAdminCommand)
         .map((next)=>{
             acc += 
 `Command: ${prefix}${next.name}
@@ -15,6 +16,6 @@ Description: ${next.description}
 `
         });
         acc += '```';
-        message.channel.send(acc);
+        message.author.createDM().then(dmChannel => dmChannel.send(acc));
     },
 };

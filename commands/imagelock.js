@@ -4,6 +4,7 @@ const db = require('../models');
 module.exports = {
     name: 'imagelock',
     description: 'Filter the usage of images in the used channel, parameters: enable || disable',
+    isAdminCommand: false,
     async execute(message, args) {
         const guild = message.channel.guild;
         const guildMember = await guild.fetchMember(message.author);
