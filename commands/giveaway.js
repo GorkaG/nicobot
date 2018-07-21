@@ -92,7 +92,6 @@ function makeSteps(filter,channel) {
                 return message.awaitReactions(currentFilter.reactionsFilter,{time: time*1000});
             })
         },
-
         giveResults(messageReactions){
             if(messageReactions === undefined || messageReactions.first() === undefined){
                 throw NO_VOTES_EXCEPTION;
@@ -122,7 +121,6 @@ function makeSteps(filter,channel) {
                 });
                 targetChannel.send("And the winners are: " + winners.join());
             });
-
         },
         handleErrors(error){
             if(error instanceof Collection){
@@ -135,7 +133,6 @@ function makeSteps(filter,channel) {
                 throw error;
             }
         },
-
         saveChannel(collectedMessages){
             targetChannel = collectedMessages.first().mentions.channels.first();
         },
@@ -161,7 +158,6 @@ function makeSteps(filter,channel) {
         getTime(){
             return time;
         },
-
     }
 }
 
@@ -189,6 +185,7 @@ module.exports = {
         .then(steps.askRoleExtraValue)
         .then(steps.saveRoleExtraValue)
         .then(()=>message.channel.send(`Done! the giveaway is starting in ${steps.getChannel()} and end in ${steps.getTime()}`))
+
         .then(steps.startGiveaway)
         .then(steps.giveResults)
         .catch(steps.handleErrors)
