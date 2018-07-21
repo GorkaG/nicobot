@@ -168,6 +168,7 @@ function makeSteps(filter,channel) {
 module.exports = {
     name: 'giveaway',
     description: 'Start a giveaway',
+    isAdminCommand: false,
     execute(message, args) {
         const filters = makeFilters(message.author);
         const steps = makeSteps(filters,message.channel);

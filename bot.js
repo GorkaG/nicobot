@@ -29,6 +29,10 @@ bot.on('message', (message) => {
             bot.commands.get(command).execute(message, bot.commands);
             return;
         }
+        if (command == "adminhelp") {
+            bot.commands.get(command).execute(message, bot.commands);
+            return;
+        }
         try {
             bot.commands.get(command).execute(message, args);
         }
