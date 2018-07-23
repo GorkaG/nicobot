@@ -1,4 +1,5 @@
 var {prefix} = require('../config.json');
+const {isAdmin} = require('../helpers/admin');
 
 module.exports = {
     name: 'adminhelp',
