@@ -1,6 +1,7 @@
 var{Collection} = require('discord.js');
 const MAX_TIME = 60000;
 const NO_VOTES_EXCEPTION = "noVotes";
+const {isAdmin} = require('../helpers/admin');
 
 function makeFilters(author) {
     let currentAuthor = author;
