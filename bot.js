@@ -1,7 +1,12 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix } = require('./config.json');
+const {isAdmin} = require('./helpers/admin');
 const helpers = require('./helpers.js');
+
+
+const NO_ADMIN_EXCEPTION = "noAdminException";
+
 
 const bot = new Discord.Client();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -34,11 +39,27 @@ bot.on('message', (message) => {
             return;
         }
         try {
-            bot.commands.get(command).execute(message, args);
+            const command = bot.commands.get(command);
+            isAdmin(message.guild,message.author)
+            .then(isAdmin => {
+                if((command.isAdminCommand && isAdmin) || !command.isAdminCommand){
+                    execute(message, args);
+                }
+                else if(command.isAdminCommand) {
+                    if(!isAdmin){
+                        throw NO_ADMIN_EXCEPTION;
+                    }
+                }
+            })
         }
         catch (error) {
-            console.error(error);
-            message.reply('there was an error trying to execute that command!');
+            if(error === NO_ADMIN_EXCEPTION){
+                console.log("someone is trying to invoke admin commands from non admin");
+            }
+            else{
+                console.error(error);
+                message.reply('there was an error trying to execute that command!');
+            }
         }
     }
     // filter function
