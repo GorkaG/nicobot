@@ -1,7 +1,6 @@
 var{Collection} = require('discord.js');
 const MAX_TIME = 60000;
 const NO_VOTES_EXCEPTION = "noVotes";
-const {isAdmin} = require('../helpers/admin');
 
 function makeFilters(author) {
     let currentAuthor = author;
@@ -165,7 +164,7 @@ function makeSteps(filter,channel) {
 module.exports = {
     name: 'giveaway',
     description: 'Start a giveaway',
-    isAdminCommand: false,
+    isAdminCommand: true,
     execute(message, args) {
         const filters = makeFilters(message.author);
         const steps = makeSteps(filters,message.channel);
