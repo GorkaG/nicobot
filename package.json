@@ -7,7 +7,8 @@
     "start": "node bot.js"
   },
   "dependencies": {
-    "discord.js": "11.1.0",
+    "@types/node": "^10.5.2",
+    "discord.js": "11.3.2",
     "mongoose": "^5.2.0",
     "request": "2.81.0"
   }

@@ -22,7 +22,7 @@ function makeFilters(author) {
         },
         reactionsFilter(reaction,user){
             //console.log(user);
-            const returnedValue = reaction.emoji.name === '👍' && !user.bot;
+            const returnedValue = reaction.emoji.name === 'NicoNicoNii' && !user.bot;
             return returnedValue;
         }
     }
@@ -63,33 +63,35 @@ function makeSteps(filter,channel) {
             return currentChannel.awaitMessages(currentFilter.authorAndChannelFilter, { max: 1, time: MAX_TIME, errors: ['time'] })
         },
         askDuration(){
-            currentChannel.send("Set the duration in seconds");
+            currentChannel.send("Sweet! Next, how long should the giveaway last?");
             return currentChannel.awaitMessages(currentFilter.authorAndTimeFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askPrize(){
-            currentChannel.send("Set the prize");
+            currentChannel.send("Ok! Finally, what do you want to giveaway?");
             return currentChannel.awaitMessages(currentFilter.authorFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askNumberOfPrizes(){
-            currentChannel.send("Set the number of prizes");
+            currentChannel.send("Neat! Now, how many winners should there be?");
             return currentChannel.awaitMessages(currentFilter.authorAndNumberFilter, { max: 1, time: MAX_TIME, errors: ['time'] });
         },
         askRoleExtraValue(){
-            currentChannel.send("Set the last role with extra value");
+            currentChannel.send("And the last role with the special love?");
             return currentChannel.awaitMessages(currentFilter.authorAndRoleFilter, {max: 1, time: MAX_TIME, errors: ['time']});
         },
         startGiveaway(){
-            return targetChannel.send(`
-            Let the giveaway begin
-        Duration ${time}
-        Prize: ${prize}
-            `)
+            return targetChannel.send({embed:{
+                title: ` ${prize} `,
+                description: `React with <:NicoNicoNii:360455426745303041> to enter! `,
+                color: 0x17A589,
+                timestamp: new Date(Date.now() + time * 1000),
+                footer: {
+                text: `${numberOfPrizes} Winners | Ends at`
+            }}})
             .then(message => {
-                message.react("👍");
+                message.react("360455426745303041");
                 return message.awaitReactions(currentFilter.reactionsFilter,{time: time*1000});
             })
         },
-       
         giveResults(messageReactions){
             if(messageReactions === undefined || messageReactions.first() === undefined){
                 throw NO_VOTES_EXCEPTION;
@@ -119,7 +121,6 @@ function makeSteps(filter,channel) {
                 });
                 targetChannel.send("And the winners are: " + winners.join());
             });
-            
         },
         handleErrors(error){
             if(error instanceof Collection){
@@ -132,7 +133,6 @@ function makeSteps(filter,channel) {
                 throw error;
             }
         },
-        
         saveChannel(collectedMessages){
             targetChannel = collectedMessages.first().mentions.channels.first();
         },
@@ -158,13 +158,13 @@ function makeSteps(filter,channel) {
         getTime(){
             return time;
         },
-        
     }
 }
 
 module.exports = {
     name: 'giveaway',
     description: 'Start a giveaway',
+    isAdminCommand: false,
     execute(message, args) {
         const filters = makeFilters(message.author);
         const steps = makeSteps(filters,message.channel);
@@ -173,18 +173,19 @@ module.exports = {
         let channel;
         let time;
 
-        message.channel.send("Let's set upp the give away, give the channel where you want it to be")
+        message.channel.send("Alright! Let's set up your giveaway! First, what channel do you want the giveaway in?")
         .then(steps.askChannel)
         .then(steps.saveChannel)
         .then(steps.askDuration)
         .then(steps.saveTime)
-        .then(steps.askPrize)
-        .then(steps.savePrize)
         .then(steps.askNumberOfPrizes)
         .then(steps.saveNumberOfPrizes)
+        .then(steps.askPrize)
+        .then(steps.savePrize)
         .then(steps.askRoleExtraValue)
         .then(steps.saveRoleExtraValue)
-        .then(()=>message.channel.send(`Almost there channel: ${steps.getChannel()} and time ${steps.getTime()}`))
+        .then(()=>message.channel.send(`Done! the giveaway is starting in ${steps.getChannel()} and end in ${steps.getTime()}`))
+
         .then(steps.startGiveaway)
         .then(steps.giveResults)
         .catch(steps.handleErrors)

@@ -1,7 +1,8 @@
 module.exports = {
     name: 'invite',
     description: 'Invite Nico to your server',
+    isAdminCommand: false,
     execute(message, args) {
-        message.channel.sendMessage('Link del bot Test: <https://goo.gl/7gtBTK> Link del bot Oficial: <https://goo.gl/Xoxuzm>');
+        message.channel.sendMessage('Link del bot Test: <Secret> Link del bot Oficial: <Secret>');
     },
 };
